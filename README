@@ -1,0 +1,68 @@
+pac-input styling
+-> http://stackoverflow.com/questions/7893857/how-do-you-style-the-dropdown-on-google-places-autocomplete-api
+
+Autocomplete example
+-> https://developers.google.com/maps/documentation/javascript/examples/places-autocomplete
+
+Firebase with GoogleMap
+https://gist.github.com/tristen/92898701ce57d0c96a05
+
+Mapbox Markers
+https://www.mapbox.com/help/markers/
+
+Clustered Markers
+https://github.com/Leaflet/Leaflet.markercluster
+
+Side Navigation Drawer HTML
+http://www.w3schools.com/howto/howto_js_sidenav.asp
+http://www.w3schools.com/howto/howto_js_fullscreen_overlay.asp
+
+Multiple auth
+https://github.com/firebase/firebaseui-web
+https://stackoverflow.com/questions/39459524/handling-linking-accounts-in-firebase
+
+// CircleMarker
+// Add markers to marker layer
+// markers.addLayer(L.circleMarker(
+//                   [coordinates[0], coordinates[1]],
+//                   {
+//                     color: '#71b550',
+//                     fillOpacity: 1
+//                   }
+//                 ));
+
+// Loads chat messages history and listens for upcoming ones.
+bEarth.prototype.loadMessages = function() {
+
+  // Loop through snapshot download once
+  // var query = this.messagesRef.orderByKey();
+  // query.once("value")
+  //   .then(function(snapshot) {
+  //     snapshot.forEach(function(childSnapshot) {
+  //       // key will be "ada" the first time and "alan" the second time
+  //       var key = childSnapshot.key;
+  //       // childData will be the actual contents of the child
+  //       var childData = childSnapshot.val();
+  //       console.log(key,childData);
+  //   });
+  // });
+
+  // Load snapshot and loop through on any change in database
+  // Print specific values
+  this.messagesRef.on('value', function(snapshot) {
+    snapshot.forEach(function(childSnapshot) {
+      // key will be "ada" the first time and "alan" the second time
+      var key = childSnapshot.key;
+      // childData will be the actual contents of the child
+      var childData = childSnapshot.val();
+      console.log(childData);
+      console.log(childSnapshot.child("properties/title").val());
+      console.log(childSnapshot.child("geometry/coordinates").val());
+    });
+  });
+
+};
+
+window.onload = function() {
+  window.bearth = new bEarth();
+};

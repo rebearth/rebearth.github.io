@@ -1,0 +1,212 @@
+<!DOCTYPE HTML>
+<!--
+    Landed by HTML5 UP
+    html5up.net | @ajlkn
+    Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+    <head>
+        <title>rebEarth</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <!--[if lte IE 8]><script src="assets/js/ie/html5shiv.js"></script><![endif]-->
+        <link rel="stylesheet" href="assets/css/main.css" />
+        <!--[if lte IE 9]><link rel="stylesheet" href="assets/css/ie9.css" /><![endif]-->
+        <!--[if lte IE 8]><link rel="stylesheet" href="assets/css/ie8.css" /><![endif]-->
+        <!-- Added to style the name and profile pic -->
+        <style>
+            #user-pic {
+              top: 15px;
+              right: -40px;
+              position: relative;
+              display: inline-block;
+              background-image: url('/images/profile_placeholder.png');
+              background-repeat: no-repeat;
+              width: 40px;
+              height: 40px;
+              background-size: 40px;
+              border-radius: 20px;
+            }
+            #user-name {
+              font-size: 16px;
+              line-height: 36px;
+              padding-right: 10px;
+              padding-left: 20px;
+            }
+        </style>
+        <!-- Google Map -->
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDpRqTa3EwhqGj2LovuTXp_SQ1vnxtSIn8&libraries=places"></script>
+        <style>
+          .controls {
+            margin-top: 10px;
+            border: 1px solid transparent;
+            border-radius: 2px 0 0 2px;
+            box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            height: 32px;
+            outline: none;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+          }
+
+          #pac-input {
+            color: #000;
+            background-color: #fff;
+            font-family: Roboto;
+            font-size: 15px;
+            font-weight: 300;
+            margin-left: 12px;
+            padding: 0 11px 0 13px;
+            text-overflow: ellipsis;
+            width: 300px;
+          }
+
+          #pac-input:focus {
+            border-color: #4d90fe;
+          }
+
+          .pac-container {
+            font-family: Roboto;
+          }
+
+          .pac-item {
+            color: black;
+          }
+        </style>
+        <!-- Upload image icon -->
+        <style>
+          .image-upload > input
+          {
+            display: none;
+          }
+          
+          .image-upload img
+          {
+            margin-top:-13px;
+            height: 80px;
+            cursor: pointer;
+            style=float:left;
+          }
+        </style>
+        <!-- Global var to store lat/lng -->
+        <script type='text/javascript' > 
+            var lat = 0;
+            var lng = 0;
+        </script>
+    </head>
+    <body class="landing">
+        <div id="page-wrapper">
+
+            <!-- Header -->
+                <header id="header">
+                    <h1 id="logo"><a href="index.html">rebEarth</a></h1>
+                    <nav id="nav">
+                        <ul>
+                            <li><a href="index.html">Home</a></li>
+                            <li><a href="upload.html">Share</a></li>
+                            <li><a href="summary.html">Stare</a></li>
+                            <li id="user-pic-li" style="display: none"><div id="user-pic" style="display: inherit"></div></li>
+                            <li id="user-name-li" style="display: none"><div id="user-name" style="display: inherit"></div></li>
+                            <li id="sign-in-li" style="display: none"><a href="./login.html" id="sign-in" class="button special" style="display: inherit">Sign In</a></li>
+                            <li id="sign-out-li" style="display: none"><a id="sign-out" class="button special" style="display: inherit">Sign Out</a></li>
+                        </ul>
+                    </nav>
+                </header>
+
+            <!-- Main -->
+            <div id="main" class="wrapper style1">
+                <div class="container">
+                    <header class="major">
+                        <h2>Let's do our bit.</h2>
+                        <p>Let's share with the world what your world looks like.</p>
+                    </header>
+
+                    <!-- Content -->
+                    <section id="content">
+                        <form id="message-form" method="post" action="#">
+                            <div class="row uniform 50%">
+                                <div class="6u 12u$(xsmall)">
+                                    <input type="text" name="title" id="title" value="" placeholder="Title" required/>
+                                </div>
+                                <div class="6u$ 12u$(xsmall)">
+                                    <input type="text" name="hashtag" id="hashtag" value="" placeholder="#tagsomething" required/>
+                                </div>
+                                <div class="12u$">
+                                    <textarea name="message" id="description" placeholder="Describe the seriousness in 140 characters" rows="6" maxlength="140" required></textarea>
+                                </div>
+                                <div class="12u 12u$(xsmall)">
+                                    <input id="coordinates" class="controls" type="text" placeholder="Click on map to get the location coordinates" required>
+                                    <input id="pac-input" class="controls" type="text" placeholder="Enter a location">
+                                    <div id="map" style="height: 400px; width: 100%;position: relative;"></div>
+                                </div>
+<!--                                 <div class="12u 12u$(xsmall)">
+                                    <input id="mediaCapture" type="file" accept="image/*,capture=camera">
+                                </div> -->
+                                <div class="12u 12u$(xsmall)">
+                                    <div class="image-upload" style="float:left">
+                                        <label for="mediaCapture">
+                                            <img src="./images/upload_image.png"/>
+                                        </label>
+                                        <input id="mediaCapture" type="file" accept="image/*,capture=camera" required>
+                                    </div>
+                                    <div style="float:left">
+                                        <input type="text" name="image-url" id="image-url" value="" placeholder="Image URL" required/>
+                                    </div>
+                                </div>
+                                <div class="12u$">
+                                    <ul class="actions">
+                                        <li><input type="submit" value="Upload" class="special" id="submit"/></li>
+                                        <li><input type="reset" value="Reset" /></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </form>
+
+                    </section>
+
+                </div>
+            </div>
+
+            <!-- Footer -->
+                <footer id="footer">
+                    <ul class="icons">
+                        <li><a href="#" class="icon alt fa-twitter"><span class="label">Twitter</span></a></li>
+                        <li><a href="#" class="icon alt fa-facebook"><span class="label">Facebook</span></a></li>
+                        <li><a href="#" class="icon alt fa-linkedin"><span class="label">LinkedIn</span></a></li>
+                        <li><a href="#" class="icon alt fa-instagram"><span class="label">Instagram</span></a></li>
+                        <li><a href="#" class="icon alt fa-github"><span class="label">GitHub</span></a></li>
+                        <li><a href="#" class="icon alt fa-envelope"><span class="label">Email</span></a></li>
+                    </ul>
+                    <ul class="copyright">
+                        <li>&copy; rebEarth. All rights reserved.</li><li>Design: <a href="#">rebEarth</a></li>
+                    </ul>
+                </footer>
+        </div>
+
+        <!-- Firebase -->
+        <script src="https://www.gstatic.com/firebasejs/3.4.1/firebase.js"></script>
+        <script>
+          // Initialize Firebase
+          var config = {
+            apiKey: "AIzaSyArN5L_JKMH3r58ctmDzEaSuPYx4NwHA4k",
+            authDomain: "bearth-ad74a.firebaseapp.com",
+            databaseURL: "https://bearth-ad74a.firebaseio.com",
+            storageBucket: "bearth-ad74a.appspot.com",
+            messagingSenderId: "768327725921"
+          };
+          firebase.initializeApp(config);
+        </script>
+        <script src="scripts/upload.js"></script>
+        <!-- Google Map -->
+        <script src="scripts/upload_map.js"></script>
+        <!-- Scripts -->
+        <script src="assets/js/jquery.min.js"></script>
+        <script src="assets/js/jquery.scrolly.min.js"></script>
+        <script src="assets/js/jquery.dropotron.min.js"></script>
+        <script src="assets/js/jquery.scrollex.min.js"></script>
+        <script src="assets/js/skel.min.js"></script>
+        <script src="assets/js/util.js"></script>
+        <!--[if lte IE 8]><script src="assets/js/ie/respond.min.js"></script><![endif]-->
+        <script src="assets/js/main.js"></script>
+
+    </body>
+</html>

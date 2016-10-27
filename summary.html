@@ -1,0 +1,370 @@
+<!DOCTYPE HTML>
+<!--
+    Landed by HTML5 UP
+    html5up.net | @ajlkn
+    Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+    <head>
+        <title>rebEarth</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <!--[if lte IE 8]><script src="assets/js/ie/html5shiv.js"></script><![endif]-->
+        <link rel="stylesheet" href="assets/css/main.css" />
+        <!--[if lte IE 9]><link rel="stylesheet" href="assets/css/ie9.css" /><![endif]-->
+        <!--[if lte IE 8]><link rel="stylesheet" href="assets/css/ie8.css" /><![endif]-->
+        <!-- Icons Markers -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <!-- Added to style the name and profile pic -->
+        <style>
+            #user-pic {
+              top: 15px;
+              right: -40px;
+              position: relative;
+              display: inline-block;
+              background-image: url('/images/profile_placeholder.png');
+              background-repeat: no-repeat;
+              width: 40px;
+              height: 40px;
+              background-size: 40px;
+              border-radius: 20px;
+            }
+            #user-name {
+              font-size: 16px;
+              line-height: 36px;
+              padding-right: 10px;
+              padding-left: 20px;
+            }
+        </style>
+        <!-- MapBox -->
+        <script src='https://api.mapbox.com/mapbox.js/v2.4.0/mapbox.js'></script>
+        <link href='https://api.mapbox.com/mapbox.js/v2.4.0/mapbox.css' rel='stylesheet' />
+        <script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/leaflet.markercluster.js'></script>
+        <link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.css' rel='stylesheet' />
+        <link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.Default.css' rel='stylesheet' />
+        <style>
+            #appcontent {
+                width: 100%;
+                height: 100%;
+            }
+        </style>
+        <style>
+            #map {
+                background-color:#1c1d26;
+                position: absolute;
+                top: 80px;
+                left: 0px;
+                right: 0px;
+                bottom: 0px;
+            }
+        </style>
+        <!-- OverlayNav -->
+        <style>
+            
+            .overlay {
+                position: absolute;
+                top: 80px;
+                left: 0px;
+                right: 0px;
+                bottom: 0px;
+                width: 0px;
+                background-color: rgb(255,255,255);
+                background-color: rgba(255,255,255, 1);
+                overflow: hidden;
+                transition: 0.5s;
+                max-width: 100%;
+            }
+
+            .overlay::-webkit-scrollbar {
+                width: 6px;
+            }
+             
+            .overlay::-webkit-scrollbar-track {
+                -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+                border-radius: 10px;
+            }
+             
+            .overlay::-webkit-scrollbar-thumb {
+                border-radius: 10px;
+                -webkit-box-shadow: inset 0 0 6px rgba(255,213,86,1.0); 
+            }
+
+            .overlay:hover {
+                overflow-y:scroll;
+            }
+
+/*            .overlay::-webkit-scrollbar {
+                width:5px; // manage scrollbar width here
+            }*/
+            
+            .overlay-content {
+                position: relative;
+                top: 0px;
+                bottom: 0px;
+                width: 100%;
+                text-align: center;
+                margin: 0;
+                padding: 0;
+                z-index: 1000;
+            }
+
+            .overlay a {
+                padding: 8px;
+                text-decoration: none;
+                font-size: 36px;
+                color: #818181;
+                display: block;
+                transition: 0.3s;
+            }
+            
+            .overlay a:hover, .overlay a:focus {
+                color: #f1f1f1;
+            }
+            
+            .overlay .material-icons {
+                margin: 0;
+                padding: 0;
+                position: absolute;
+                top: 0px;
+                right: 0px;
+                font-size: 20px;
+                color: #404040;
+                background-color: #ffffff;
+            }
+            
+            @media screen and (max-height: 450px) {
+              .overlay a {font-size: 20px}
+              .overlay .material-icons {
+                font-size: 40px;
+                top: 0px;
+                right: 0px;
+              }
+            }
+
+            #image_content {
+                padding: 0;
+                margin: 0;
+            }
+
+            #marker_pic {
+                width: 100%;
+                height: auto;
+                top: 0px;
+                padding: 0;
+                margin: 0;
+                bottom: 0;
+                display: block;
+                /*https://mor10.com/removing-white-space-image-elements-inline-elements-descenders/:*/
+            }
+            
+            #marker_content {
+                min-height: 95px;
+                padding: 8px;
+                margin: 0;
+                z-index: 1;
+                text-align: left;
+                /*padding-left: 8px;*/
+                /*padding-right: 8px;*/
+                padding-bottom: 18px;
+                background-color: #343332;
+            }  
+            
+            #marker_content h3{
+                padding: 0px;
+                margin: 0px;
+            }
+            
+            #marker_content h6{
+                padding: 0px;
+                margin: 0px;
+                padding-bottom: 5px;
+            }
+            
+            .img-with-text {
+                width: 80px;
+                min-height: 80px;
+                float:left;
+                text-align:center;
+                margin-right: 10px;
+            }
+            
+            .img-with-text p {
+                margin-bottom: 0;
+                padding-bottom: 0;
+            }
+
+            #upvote {
+                padding: 0;
+                margin: 0; 
+                display:block;
+                width: 80px;
+                height: 24px;
+                background-image: url(images/icons/upvote.png);
+                background-repeat: no-repeat;
+                background-position: center;
+                background-size: contain;
+                border-style: hidden;
+                /*There was an ugly border. Had to hide using border-style: hidden;*/
+            }
+            #upvote:hover {
+                padding: 0;
+                margin: 0;  
+                display:block;
+                width: 80px;
+                height: 24px;
+                background-image: url(images/icons/upvotedone.png);
+                background-repeat: no-repeat;
+                background-position: center;
+                background-size: contain;
+                border-style: hidden;
+            }
+
+            #downvote {
+                padding: 0;
+                margin: 0; 
+                display:block;
+                width: 80px;
+                height: 24px;
+                background-image: url(images/icons/downvote.png);
+                background-repeat: no-repeat;
+                background-position: center;
+                background-size: contain;
+                border-style: hidden;
+                /*There was an ugly border. Had to hide using border-style: hidden;*/
+            }
+            #downvote:hover {
+                padding: 0;
+                margin: 0;  
+                display:block;
+                width: 80px;
+                height: 24px;
+                background-image: url(images/icons/downvotedone.png);
+                background-repeat: no-repeat;
+                background-position: center;
+                background-size: contain;
+                border-style: hidden;
+            }
+            .image-cropper {
+                width: 48px;
+                height: 48px;
+                position: relative;
+                overflow: hidden;
+                -webkit-border-radius: 50%;
+                -moz-border-radius: 50%;
+                -ms-border-radius: 50%;
+                -o-border-radius: 50%;
+                border-radius: 50%;
+                float: left;
+            }
+            #uploaded_pic {
+                display: inline;
+                margin: 0 auto;
+                height: 100%;
+                width: auto;
+                float:left;
+            }
+        </style>
+    </head>
+    <body class="landing">
+
+        <!-- Facebook -->
+        <div id="fb-root"></div>
+        <script>(function(d, s, id) {
+          var js, fjs = d.getElementsByTagName(s)[0];
+          if (d.getElementById(id)) return;
+          js = d.createElement(s); js.id = id;
+          js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.8&appId=313316339040520";
+          fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));</script>
+
+        <div id="page-wrapper">
+
+            <!-- Header -->
+                <header id="header">
+                    <h1 id="logo"><a href="index.html">rebEarth</a></h1>
+                    <nav id="nav">
+                        <ul>
+                            <li><a href="index.html">Home</a></li>
+                            <li><a href="upload.html">Share</a></li>
+                            <li><a href="summary.html">Stare</a></li>
+                            <li id="user-pic-li" style="display: none"><div id="user-pic" style="display: inherit"></div></li>
+                            <li id="user-name-li" style="display: none"><div id="user-name" style="display: inherit"></div></li>
+                            <li id="sign-in-li" style="display: none"><a href="./login.html" id="sign-in" class="button special" style="display: inherit">Sign In</a></li>
+                            <li id="sign-out-li" style="display: none"><a id="sign-out" class="button special" style="display: inherit">Sign Out</a></li>
+                        </ul>
+                    </nav>
+                </header>
+
+            <!-- Main -->
+            <div id="main" class="wrapper style1">
+                <div id="appcontent">
+                    <div id="map">
+                    </div>
+                    <!-- Overlay -->
+                    <div id="myNav" class="overlay">
+                        <div class="overlay-content">
+                            <!-- Put contents here -->
+                            <input type="hidden" id="marker_key">
+                            <div id="image_content" >
+                                <a href="javascript:void(0)" class="material-icons" onclick="closeNav()">close</a>
+                                <img src="" id="marker_pic" onload='openNav()'>
+                            </div>
+                            <div id="marker_content" >
+                                <div class="img-with-text">
+                                    <a id="upvote" onclick='upvote()'></a>
+                                    <p id="vote"></p>
+                                    <a id="downvote" onclick='downvote()'></a>
+                                </div>
+                                <div style="padding-top: 8px">
+                                    <p id="marker_title" style="font-size: 24px;margin-bottom: 0;">Title</p>
+                                    <p id="marker_uploader" style="font-size: 12px;margin-bottom: 0;">Uploaded by:</p>
+<!--                                     <div>
+                                        <div class="image-cropper">
+                                            <img id="uploaded_pic" src="http://www.electricvelocity.com.au/Upload/Blogs/smart-e-bike-side_2.jpg" class="rounded" />
+                                        </div>
+                                        <div style="color: #ffffff;">Mobashir</div>
+                                    </div> -->
+<!--                                     <div>
+                                        <li id="user-pic-li" style="display: none"><div id="user-pic" style="display: inherit"></div></li>
+                                        <li id="user-name-li" style="display: none"><div id="user-name" style="display: inherit"></div></li>
+                                    </div>   -->  
+                                </div>
+                            </div>      
+                            <p id="description" style="font-size: 16px;color: #000000; padding: 8px;text-align:justify;line-height: 150%;">Singapore, officially the Republic of Singapore, and often referred to as the Lion City, the Garden City, and the Red Dot, is a global city and sovereign state in Southeast Asia and the world's only island city-state. It lies one degree (137 km) north of the equator, south of the southernmost tip of continental Asia and peninsular Malaysia, with Indonesia's Riau Islands to the south. Singapore's territory consists of a diamond-shaped main island along with 62 other islets. Since independence, extensive land reclamation has increased its total size by 23% (130 km2), and its greening policy has covered the densely populated island with tropical flora, parks and gardens.</p>
+                            <div id="fbcomments" class="fb-comments" data-href="" data-width="390px" data-numposts="5" style="background-color: #ffffff;padding-top: 0px"></div>
+                            <!-- Space     -->
+                            <!-- <div style="background-color: #343332;height: 8px" ></div> -->
+                        </div>
+                    </div> 
+                </div>    
+            </div>
+        </div>
+
+        <!-- Firebase -->
+        <script src="https://www.gstatic.com/firebasejs/3.4.1/firebase.js"></script>
+        <script>
+          // Initialize Firebase
+          var config = {
+            apiKey: "AIzaSyArN5L_JKMH3r58ctmDzEaSuPYx4NwHA4k",
+            authDomain: "bearth-ad74a.firebaseapp.com",
+            databaseURL: "https://bearth-ad74a.firebaseio.com",
+            storageBucket: "bearth-ad74a.appspot.com",
+            messagingSenderId: "768327725921"
+          };
+          firebase.initializeApp(config);
+        </script>
+        <script src="scripts/summary.js"></script>
+        <!-- Facebook -->
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+        <!-- Scripts -->
+        <script src="assets/js/jquery.min.js"></script>
+        <script src="assets/js/jquery.scrolly.min.js"></script>
+        <script src="assets/js/jquery.dropotron.min.js"></script>
+        <script src="assets/js/jquery.scrollex.min.js"></script>
+        <script src="assets/js/skel.min.js"></script>
+        <script src="assets/js/util.js"></script>
+        <!--[if lte IE 8]><script src="assets/js/ie/respond.min.js"></script><![endif]-->
+        <script src="assets/js/main.js"></script>
+
+    </body>
+</html>
